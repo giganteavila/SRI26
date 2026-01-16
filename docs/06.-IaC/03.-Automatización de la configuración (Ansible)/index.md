@@ -1,0 +1,5 @@
+# 03.-Automatización de la configuración (Ansible)
+
+Ansible es una herramienta de automatización de configuración, administración de sistemas y orquestación de infraestructura. Su enfoque sin agentes y basado en SSH lo hace ligero y fácil de implementar en cualquier entorno, permitiendo gestionar servidores de manera eficiente y reproducible. Con Ansible, es posible automatizar tareas repetitivas, como la instalación de software, la configuración de sistemas y la gestión de redes, facilitando así la administración de infraestructuras tanto pequeñas como escalables a gran escala.
+
+Una de las grandes ventajas de Ansible es su simplicidad y facilidad de uso, gracias a su sintaxis basada en YAML y su diseño declarativo. Además, se diferencia de otras herramientas como Puppet o Chef al no requerir la instalación de agentes en los nodos administrados. A través de su uso de inventarios, módulos y playbooks, Ansible permite estructurar y organizar configuraciones de manera eficiente, garantizando coherencia y reduciendo errores en entornos de TI.
