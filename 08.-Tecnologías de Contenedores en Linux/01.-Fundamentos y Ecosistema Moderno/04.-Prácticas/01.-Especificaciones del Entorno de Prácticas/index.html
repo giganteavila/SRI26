@@ -13010,10 +13010,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#desglose-tecnico-de-los-parametros" class="md-nav__link">
+  <a href="#gestion-de-privilegios-y-binario" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desglose Técnico de los Parámetros
+        Gestión de Privilegios y Binario
       
     </span>
   </a>
@@ -13021,10 +13021,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#nota-sobre-la-persistencia-y-el-particionado" class="md-nav__link">
+  <a href="#identidad-y-recursos-de-computacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Nota sobre la Persistencia y el Particionado
+        Identidad y Recursos de Computación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#almacenamiento-y-optimizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Almacenamiento y Optimización
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conectividad-e-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conectividad e Instalación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entorno-grafico-y-agentes-de-integracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entorno Gráfico y Agentes de Integración
       
     </span>
   </a>
@@ -14951,10 +14984,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#desglose-tecnico-de-los-parametros" class="md-nav__link">
+  <a href="#gestion-de-privilegios-y-binario" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desglose Técnico de los Parámetros
+        Gestión de Privilegios y Binario
       
     </span>
   </a>
@@ -14962,10 +14995,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#nota-sobre-la-persistencia-y-el-particionado" class="md-nav__link">
+  <a href="#identidad-y-recursos-de-computacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Nota sobre la Persistencia y el Particionado
+        Identidad y Recursos de Computación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#almacenamiento-y-optimizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Almacenamiento y Optimización
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conectividad-e-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conectividad e Instalación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entorno-grafico-y-agentes-de-integracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entorno Gráfico y Agentes de Integración
       
     </span>
   </a>
@@ -15105,36 +15171,50 @@
 <li><strong>Almacenamiento:</strong> 20 GB de disco virtual (formato QCOW2).</li>
 <li><strong>Sistema de archivos:</strong> EXT4 o XFS, con una partición dedicada para <code>/var/lib/docker</code> si se desea simular cuotas de disco.</li>
 </ul>
-<pre><code class="language-bash">virt-install \
+<pre><code class="language-bash">sudo virt-install \
   --name debian-containers-lab \
   --vcpus 2 \
   --memory 4096 \
-  --disk path=/var/lib/libvirt/images/debian-lab.qcow2,size=20,format=qcow2 \
-  --os-variant debian12 \
-  --cdrom &lt;/ruta/a/debian-12-netinst.iso&gt; \
+  --disk path=/home/zinnico/kvm-images/debian-lab.qcow2,size=20,format=qcow2 \
+  --os-variant debian13 \
+  --cdrom /home/zinnico/Descargas/debian-13.3.0-amd64-netinst.iso \
   --network network=default \
-  --graphics none \
-  --console pty,target_type=serial \
-  --extra-args &quot;console=ttyS0&quot;
+  --graphics spice \
+  --video qxl \
+  --channel spicevmc,target_type=virtio,name=com.redhat.spice.0
 </code></pre>
-<h5 id="desglose-tecnico-de-los-parametros">Desglose Técnico de los Parámetros<a class="headerlink" href="#desglose-tecnico-de-los-parametros" title="Permanent link">&para;</a></h5>
-<p>El sistema interpreta cada opción de la siguiente manera para cumplir con los requisitos del laboratorio:</p>
+<h6 id="gestion-de-privilegios-y-binario">Gestión de Privilegios y Binario<a class="headerlink" href="#gestion-de-privilegios-y-binario" title="Permanent link">&para;</a></h6>
 <ul>
-<li><strong><code>--name debian-containers-lab</code></strong>: Define el identificador único de la máquina virtual en el hipervisor KVM.</li>
-<li><strong><code>--vcpus 2</code></strong>: Asigna dos unidades de procesamiento virtual, cumpliendo con la recomendación para el manejo fluido de los motores de contenedores.</li>
-<li><strong><code>--memory 4096</code></strong>: Reserva 4 GB de memoria RAM. El técnico debe asegurar que el host físico dispone de esta capacidad para evitar el uso de <em>swap</em> en el anfitrión.</li>
-<li><strong><code>--disk ...,size=20,format=qcow2</code></strong>: Crea un volumen de almacenamiento de 20 GB. El uso del formato <strong>QCOW2</strong> es fundamental, ya que permite el crecimiento dinámico del archivo (Copy-on-Write) y la creación de instantáneas (<em>snapshots</em>) antes de realizar prácticas críticas.</li>
-<li><strong><code>--os-variant debian12</code></strong>: Optimiza los controladores virtuales (virtio) para el kernel específico de Debian Bookworm, garantizando el máximo rendimiento de red y disco.</li>
-<li><strong><code>--graphics none / --extra-args "console=ttyS0"</code></strong>: Esta combinación elimina la necesidad de una interfaz gráfica (VGA) y redirige la salida de la instalación a la terminal serie. El administrador gestiona la instalación íntegramente mediante texto, emulando una conexión de consola serie real.</li>
+<li><strong><code>sudo</code></strong>: Los administradores ejecutan el comando con privilegios de superusuario para permitir que el proceso interactúe con el demonio de sistema de <code>libvirt</code> y tenga permisos de escritura en los dispositivos de bloque y redes del anfitrión.</li>
+<li><strong><code>virt-install</code></strong>: Herramienta de línea de comandos de la suite <em>virt-manager</em> utilizada para la creación y provisión de nuevas máquinas virtuales (dominios).</li>
 </ul>
-<h5 id="nota-sobre-la-persistencia-y-el-particionado">Nota sobre la Persistencia y el Particionado<a class="headerlink" href="#nota-sobre-la-persistencia-y-el-particionado" title="Permanent link">&para;</a></h5>
-<p>Durante el proceso de instalación de Debian 12, el administrador debe intervenir en el particionado manual para cumplir con el diseño de persistencia solicitado:</p>
-<ol>
-<li><strong>Sistema de archivos:</strong> Se recomienda seleccionar <strong>EXT4</strong> por su estabilidad o <strong>XFS</strong> si se prevé el uso de cuotas de disco avanzadas para los volúmenes de Docker.</li>
-<li><strong>Partición dedicada:</strong> El técnico debe crear un punto de montaje específico en <strong><code>/var/lib/docker</code></strong> (o <code>/home/.local/share/containers</code> para Podman rootless).</li>
-<li>Esta separación física garantiza que, si los logs o imágenes de los contenedores agotan el espacio en disco, no afecten a la partición raíz (<code>/</code>) del sistema operativo, permitiendo que la máquina virtual Debian siga siendo operativa para tareas de rescate.</li>
-</ol>
-<p>Una vez finalizado el comando, el sistema inicia la máquina virtual y el técnico procede con la configuración del stack de software sobre una base de infraestructura limpia y optimizada.</p>
+<h6 id="identidad-y-recursos-de-computacion">Identidad y Recursos de Computación<a class="headerlink" href="#identidad-y-recursos-de-computacion" title="Permanent link">&para;</a></h6>
+<ul>
+<li><strong><code>--name debian-containers-lab</code></strong>: Define el nombre único con el que el hipervisor identificará a la máquina virtual. Es el identificador que los técnicos utilizarán posteriormente en comandos de gestión como <code>virsh start</code> o <code>virsh destroy</code>.</li>
+<li><strong><code>--vcpus 2</code></strong>: Asigna dos unidades de procesamiento virtual. El sistema reserva esta capacidad del procesador físico para garantizar que el motor de contenedores (Docker/Podman) tenga suficiente ciclo de cómputo para gestionar los procesos aislados.</li>
+<li><strong><code>--memory 4096</code></strong>: Reserva 4096 MiB (4 GB) de memoria RAM para la instancia. En administración de sistemas, se considera el mínimo recomendado para ejecutar pilas de servicios multicontenedor sin comprometer la estabilidad del sistema operativo Debian.</li>
+</ul>
+<h6 id="almacenamiento-y-optimizacion">Almacenamiento y Optimización<a class="headerlink" href="#almacenamiento-y-optimizacion" title="Permanent link">&para;</a></h6>
+<ul>
+<li><strong><code>--disk path=...,size=20,format=qcow2</code></strong>:</li>
+<li><strong><code>path</code></strong>: Ubicación física del archivo que emula el disco duro.</li>
+<li><strong><code>size=20</code></strong>: Define un tamaño máximo de 20 GB.</li>
+<li><strong><code>format=qcow2</code></strong>: Utiliza el formato <em>Copy-on-Write</em>. Los técnicos eligen este formato porque permite el crecimiento dinámico del archivo (solo ocupa el espacio que realmente se usa) y facilita la creación de instantáneas o <em>snapshots</em>.</li>
+<li><strong><code>--os-variant debian12</code></strong>: Informa al hipervisor sobre el sistema operativo invitado. El sistema utiliza esta información para configurar automáticamente los controladores <strong>VirtIO</strong>, optimizando el rendimiento de la entrada/salida (I/O) y la gestión de energía.</li>
+</ul>
+<h6 id="conectividad-e-instalacion">Conectividad e Instalación<a class="headerlink" href="#conectividad-e-instalacion" title="Permanent link">&para;</a></h6>
+<ul>
+<li><strong><code>--cdrom .../debian-13.3.0-netinst.iso</code></strong>: Define el origen del medio de instalación. El sistema emula una unidad óptica virtual y carga la imagen ISO de Debian en el proceso de arranque.</li>
+<li><strong><code>--network network=default</code></strong>: Conecta la máquina virtual a la red virtual predeterminada de <code>libvirt</code> (normalmente <code>virbr0</code>). El sistema proporciona acceso a internet mediante <strong>NAT</strong>, permitiendo que los administradores descarguen el stack de software (Docker/Podman) tras la instalación base.</li>
+</ul>
+<h6 id="entorno-grafico-y-agentes-de-integracion">Entorno Gráfico y Agentes de Integración<a class="headerlink" href="#entorno-grafico-y-agentes-de-integracion" title="Permanent link">&para;</a></h6>
+<ul>
+<li><strong><code>--graphics spice</code></strong>: Establece el uso del protocolo de comunicación gráfica SPICE. Los técnicos lo seleccionan para obtener una respuesta más fluida de la interfaz de usuario en comparación con el protocolo VNC.</li>
+<li><strong><code>--video qxl</code></strong>: Configura una tarjeta de vídeo virtual con el controlador QXL. Este driver está diseñado específicamente para trabajar con SPICE y permite aceleración básica de vídeo y cambios dinámicos de resolución.</li>
+<li><strong><code>--channel spicevmc,target_type=virtio,name=com.redhat.spice.0</code></strong>: Crea un canal de datos serie entre el anfitrión y el invitado. Los administradores lo implementan para que el agente interno (<code>spice-vdagent</code>) pueda realizar tareas de integración como la sincronización del portapapeles y el ajuste automático de la pantalla al redimensionar la ventana del visor.</li>
+</ul>
+<hr />
+<p><strong>Resultado técnico esperado:</strong> Tras la ejecución de este comando, el sistema procederá a reservar los recursos especificados y abrirá una ventana de consola gráfica. Los técnicos deberán entonces proceder con la instalación interactiva de Debian 13, prestando especial atención al particionado manual de los 20 GB asignados para asegurar la persistencia de los datos en <code>/var/lib/docker</code>.</p>
 <blockquote>
 <p>Para garantizar una implementación uniforme y evitar la intervención manual en cada despliegue, los administradores pueden utilizar el método de (<em>Preseeding</em>)[https://wiki.debian.org/DebianInstaller/Preseed] de Debian. Esta técnica permite predefinir las respuestas que el instalador solicitaría normalmente, incluyendo la compleja configuración del particionado del disco.</p>
 </blockquote>
