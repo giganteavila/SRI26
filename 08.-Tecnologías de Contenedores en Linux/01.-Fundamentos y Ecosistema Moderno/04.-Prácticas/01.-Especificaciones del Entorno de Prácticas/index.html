@@ -13010,6 +13010,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#desglose-tecnico-de-los-parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desglose Técnico de los Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nota-sobre-la-persistencia-y-el-particionado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nota sobre la Persistencia y el Particionado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#21-actualizacion-y-preparacion-del-sistema-base" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -14929,6 +14951,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#desglose-tecnico-de-los-parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desglose Técnico de los Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nota-sobre-la-persistencia-y-el-particionado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nota sobre la Persistencia y el Particionado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#21-actualizacion-y-preparacion-del-sistema-base" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -15061,6 +15105,39 @@
 <li><strong>Almacenamiento:</strong> 20 GB de disco virtual (formato QCOW2).</li>
 <li><strong>Sistema de archivos:</strong> EXT4 o XFS, con una partición dedicada para <code>/var/lib/docker</code> si se desea simular cuotas de disco.</li>
 </ul>
+<pre><code class="language-bash">virt-install \
+  --name debian-containers-lab \
+  --vcpus 2 \
+  --memory 4096 \
+  --disk path=/var/lib/libvirt/images/debian-lab.qcow2,size=20,format=qcow2 \
+  --os-variant debian12 \
+  --cdrom &lt;/ruta/a/debian-12-netinst.iso&gt; \
+  --network network=default \
+  --graphics none \
+  --console pty,target_type=serial \
+  --extra-args &quot;console=ttyS0&quot;
+</code></pre>
+<h5 id="desglose-tecnico-de-los-parametros">Desglose Técnico de los Parámetros<a class="headerlink" href="#desglose-tecnico-de-los-parametros" title="Permanent link">&para;</a></h5>
+<p>El sistema interpreta cada opción de la siguiente manera para cumplir con los requisitos del laboratorio:</p>
+<ul>
+<li><strong><code>--name debian-containers-lab</code></strong>: Define el identificador único de la máquina virtual en el hipervisor KVM.</li>
+<li><strong><code>--vcpus 2</code></strong>: Asigna dos unidades de procesamiento virtual, cumpliendo con la recomendación para el manejo fluido de los motores de contenedores.</li>
+<li><strong><code>--memory 4096</code></strong>: Reserva 4 GB de memoria RAM. El técnico debe asegurar que el host físico dispone de esta capacidad para evitar el uso de <em>swap</em> en el anfitrión.</li>
+<li><strong><code>--disk ...,size=20,format=qcow2</code></strong>: Crea un volumen de almacenamiento de 20 GB. El uso del formato <strong>QCOW2</strong> es fundamental, ya que permite el crecimiento dinámico del archivo (Copy-on-Write) y la creación de instantáneas (<em>snapshots</em>) antes de realizar prácticas críticas.</li>
+<li><strong><code>--os-variant debian12</code></strong>: Optimiza los controladores virtuales (virtio) para el kernel específico de Debian Bookworm, garantizando el máximo rendimiento de red y disco.</li>
+<li><strong><code>--graphics none / --extra-args "console=ttyS0"</code></strong>: Esta combinación elimina la necesidad de una interfaz gráfica (VGA) y redirige la salida de la instalación a la terminal serie. El administrador gestiona la instalación íntegramente mediante texto, emulando una conexión de consola serie real.</li>
+</ul>
+<h5 id="nota-sobre-la-persistencia-y-el-particionado">Nota sobre la Persistencia y el Particionado<a class="headerlink" href="#nota-sobre-la-persistencia-y-el-particionado" title="Permanent link">&para;</a></h5>
+<p>Durante el proceso de instalación de Debian 12, el administrador debe intervenir en el particionado manual para cumplir con el diseño de persistencia solicitado:</p>
+<ol>
+<li><strong>Sistema de archivos:</strong> Se recomienda seleccionar <strong>EXT4</strong> por su estabilidad o <strong>XFS</strong> si se prevé el uso de cuotas de disco avanzadas para los volúmenes de Docker.</li>
+<li><strong>Partición dedicada:</strong> El técnico debe crear un punto de montaje específico en <strong><code>/var/lib/docker</code></strong> (o <code>/home/.local/share/containers</code> para Podman rootless).</li>
+<li>Esta separación física garantiza que, si los logs o imágenes de los contenedores agotan el espacio en disco, no afecten a la partición raíz (<code>/</code>) del sistema operativo, permitiendo que la máquina virtual Debian siga siendo operativa para tareas de rescate.</li>
+</ol>
+<p>Una vez finalizado el comando, el sistema inicia la máquina virtual y el técnico procede con la configuración del stack de software sobre una base de infraestructura limpia y optimizada.</p>
+<blockquote>
+<p>Para garantizar una implementación uniforme y evitar la intervención manual en cada despliegue, los administradores pueden utilizar el método de (<em>Preseeding</em>)[https://wiki.debian.org/DebianInstaller/Preseed] de Debian. Esta técnica permite predefinir las respuestas que el instalador solicitaría normalmente, incluyendo la compleja configuración del particionado del disco.</p>
+</blockquote>
 <h4 id="21-actualizacion-y-preparacion-del-sistema-base">2.1 Actualización y preparación del sistema base<a class="headerlink" href="#21-actualizacion-y-preparacion-del-sistema-base" title="Permanent link">&para;</a></h4>
 <p>El técnico inicia el proceso sincronizando los índices de paquetes y asegurando que el sistema operativo soporte el transporte de datos a través de HTTPS. Se instalan las herramientas básicas de gestión de certificados y claves criptográficas.</p>
 <pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt upgrade -y
